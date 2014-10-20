@@ -6,7 +6,7 @@ cdef class Transaction(object):
     cdef public int cluster_pos
     cdef public int cluster_id
 
-    def __init__(self, list items):
+    def __init__(Transaction self, list items):
         self.cluster_pos = 0
         self.cluster_id = 0
         self.items = items
@@ -21,7 +21,7 @@ cdef class Cluster(object):
     cdef public dict occ
     cdef public list transactions
 
-    def __init__(self, int cluster_id, Transaction transaction):
+    def __init__(Cluster self, int cluster_id, Transaction transaction):
         self.id = cluster_id
         self.n = 1
         self.s = self.w = len(transaction.items)
@@ -29,7 +29,7 @@ cdef class Cluster(object):
         self.transactions = [transaction]
         transaction.cluster_id = cluster_id
 
-    def __str__(self):
+    def __str__(Cluster self):
         return "<Cluster %s: %s>" % (self.id, len(self.transactions))
 
 cdef void add_transaction(Cluster cluster, Transaction transaction):
