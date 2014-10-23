@@ -34,7 +34,11 @@ cdef class Cluster(object):
 
 cdef void add_transaction(Cluster cluster, Transaction transaction):
     for item in transaction.items:
-        cluster.occ[item] = cluster.occ.get(item, 0) + 1
+        if item in cluster.occ:
+            cluster.occ[item] +=  1
+        else:
+            cluster.occ[item] = 1
+
     transaction.cluster_id = cluster.id
     transaction.cluster_pos = len(cluster.transactions)
     cluster.transactions.append(transaction)
@@ -101,7 +105,7 @@ cdef double get_delta(int s, int w, int n, dict occ, list items, double r):
         w_new = w
         s_new = s + ilen
         for item in items:
-            if not occ.get(item):
+            if item not in occ:
                 w_new += 1
         profit = s * n / (w ** r)
         profit_new = s_new * (n + 1) / (w_new ** r)
